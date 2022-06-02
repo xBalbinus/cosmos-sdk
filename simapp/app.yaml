@@ -1,3 +1,9 @@
+advice:
+  interface_bindings:
+    - module_name: bank
+    - input: github.com/cosmos/cosmos-sdk/x/bank/types/AccountKeeper
+    - binding: github.com/cosmos/cosmos-sdk/x/auth/keeper/AccountKeeper
+
 modules:
   - name: runtime
     config:

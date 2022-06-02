@@ -48,3 +48,11 @@ message StoreKeyConfig {
   // the kv store key to use instead of the module name.
   string kv_store_key = 2;
 }
+
+message InterfaceBinding {
+  string module_name = 1;
+
+  string input = 2;
+
+  string binding = 3;
+}

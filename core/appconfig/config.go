@@ -39,7 +39,7 @@ func LoadYAML(bz []byte) depinject.Config {
 	return LoadJSON(j)
 }
 
-// Compose composes a v1alpha1 app config into a container option by resolving
+// Compose composes a v1alpha1 app config into a container config by resolving
 // the required modules and composing their options.
 func Compose(appConfig *appv1alpha1.Config) depinject.Config {
 	opts := []depinject.Config{
