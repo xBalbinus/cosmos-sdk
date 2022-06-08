@@ -38,6 +38,10 @@ type groupResolver struct {
 	graphNode    *graphviz.Node
 }
 
+func (g *groupResolver) getType() reflect.Type {
+	return g.typ
+}
+
 type sliceGroupResolver struct {
 	*groupResolver
 }

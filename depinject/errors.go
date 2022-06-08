@@ -50,7 +50,6 @@ func (err ErrNoTypeForExplicitBindingFound) Error() string {
 		return fmt.Sprintf("Given the explicit interface binding %s, a provider of type %s was not found.",
 			err.PreferredInterface, err.PreferredType)
 	}
-
 }
 
 func duplicateDefinitionError(typ reflect.Type, duplicateLoc Location, existingLoc string) error {

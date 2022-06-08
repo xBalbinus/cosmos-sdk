@@ -65,3 +65,7 @@ func (s simpleResolver) addNode(p *simpleProvider, _ int) error {
 func (s simpleResolver) typeGraphNode() *graphviz.Node {
 	return s.graphNode
 }
+
+func (s simpleResolver) getType() reflect.Type {
+	return s.typ
+}
