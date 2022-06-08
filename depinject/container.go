@@ -11,8 +11,9 @@ import (
 type container struct {
 	*debugConfig
 
-	resolvers   map[string]resolver
-	preferences map[string]preference
+	resolversByType map[reflect.Type]resolver
+	resolvers       map[string]resolver
+	preferences     map[string]preference
 
 	moduleKeys map[string]*moduleKey
 
@@ -28,12 +29,13 @@ type resolveFrame struct {
 
 func newContainer(cfg *debugConfig) *container {
 	return &container{
-		debugConfig: cfg,
-		resolvers:   map[string]resolver{},
-		moduleKeys:  map[string]*moduleKey{},
-		preferences: map[string]preference{},
-		callerStack: nil,
-		callerMap:   map[Location]bool{},
+		debugConfig:     cfg,
+		resolvers:       map[string]resolver{},
+		resolversByType: map[reflect.Type]resolver{},
+		moduleKeys:      map[string]*moduleKey{},
+		preferences:     map[string]preference{},
+		callerStack:     nil,
+		callerMap:       map[Location]bool{},
 	}
 }
 
@@ -77,8 +79,6 @@ func (c *container) call(provider *ProviderDescriptor, moduleKey *moduleKey) ([]
 }
 
 func (c *container) getResolver(typ reflect.Type, key *moduleKey) (resolver, error) {
-	c.logf("Resolving %v", typ)
-
 	pr, err := c.getPreferredResolver(typ, key)
 	if err != nil {
 		return nil, err
@@ -135,20 +135,22 @@ func (c *container) getResolver(typ reflect.Type, key *moduleKey) (resolver, err
 	res, _ := c.resolverByType(typ)
 
 	if res == nil && typ.Kind() == reflect.Interface {
-		var matches []reflect.Type
+		matches := map[reflect.Type]reflect.Type{}
+		var resolverType reflect.Type
 		for _, r := range c.resolvers {
-			rType := r.getType()
-			if rType.Kind() != reflect.Interface && rType.Implements(typ) {
-				matches = append(matches, rType)
+			//fmt.Println(k)
+			resolverType = r.getType()
+			if resolverType.Kind() != reflect.Interface && resolverType.Implements(typ) {
+				matches[resolverType] = resolverType
 			}
 		}
 
 		if len(matches) == 1 {
-			res, _ = c.resolverByType(matches[0])
-			c.logf("Implicitly registering resolver %v for interface type %v", matches[0], typ)
+			res, _ = c.resolverByType(resolverType)
+			c.logf("Implicitly registering resolver %v for interface type %v", resolverType, typ)
 			c.addResolver(typ, res)
 		} else if len(matches) > 1 {
-			return nil, &ErrMultipleImplicitInterfaceBindings{Interface: typ, Matches: matches}
+			return nil, newErrMultipleImplicitInterfaceBindings(typ, matches)
 		}
 	}
 
@@ -182,7 +184,7 @@ func (c *container) getPreferredResolver(typ reflect.Type, key *moduleKey) (reso
 		return res, nil
 	}
 
-	return nil, NewErrNoTypeForExplicitBindingFound(pref)
+	return nil, newErrNoTypeForExplicitBindingFound(pref)
 }
 
 var stringType = reflect.TypeOf("")
@@ -479,7 +481,9 @@ func (c *container) addPreference(p preference) {
 }
 
 func (c *container) resolverByType(typ reflect.Type) (resolver, bool) {
-	return c.resolverByTypeName(fullyQualifiedTypeName(typ))
+	//return c.resolverByTypeName(fullyQualifiedTypeName(typ))
+	res, found := c.resolversByType[typ]
+	return res, found
 }
 
 func (c *container) resolverByTypeName(typeName string) (resolver, bool) {
@@ -488,7 +492,9 @@ func (c *container) resolverByTypeName(typeName string) (resolver, bool) {
 }
 
 func (c *container) addResolver(typ reflect.Type, res resolver) {
+	fmt.Printf("addResolver for type %v keyed as %s\n", typ, fullyQualifiedTypeName(typ))
 	c.resolvers[fullyQualifiedTypeName(typ)] = res
+	c.resolversByType[typ] = res
 }
 
 func markGraphNodeAsUsed(node *graphviz.Node) {
