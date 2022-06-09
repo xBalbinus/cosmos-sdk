@@ -212,7 +212,9 @@ func NewSimApp(
 	var appBuilder *runtime.AppBuilder
 	var msgServiceRouter *baseapp.MsgServiceRouter
 
-	if err := depinject.Inject(AppConfig,
+	configs := depinject.Configs(AppConfig, depinject.Supply(&encodingConfig.TxConfig))
+	var opttt func(*baseapp.BaseApp)
+	if err := depinject.Inject(configs,
 		&appBuilder,
 		&app.ParamsKeeper,
 		&app.CapabilityKeeper,
@@ -227,9 +229,12 @@ func NewSimApp(
 		&app.NFTKeeper,
 		&app.SlashingKeeper,
 		&msgServiceRouter,
+		&opttt,
 	); err != nil {
 		panic(err)
 	}
+
+	baseAppOptions = append(baseAppOptions, opttt)
 
 	app.App = appBuilder.Build(logger, db, traceStore, msgServiceRouter, baseAppOptions...)
 
