@@ -15,8 +15,6 @@ import (
 	tmos "github.com/tendermint/tendermint/libs/os"
 	dbm "github.com/tendermint/tm-db"
 
-	"cosmossdk.io/core/appconfig"
-
 	"github.com/cosmos/cosmos-sdk/depinject"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
@@ -192,9 +190,9 @@ func init() {
 }
 
 //go:embed app.yaml
-var appConfigYaml []byte
+//var appConfigYaml []byte
 
-var AppConfig = appconfig.LoadYAML(appConfigYaml)
+//var AppConfig = appconfig.LoadYAML(appConfigYaml)
 
 // NewSimApp returns a reference to an initialized SimApp.
 func NewSimApp(

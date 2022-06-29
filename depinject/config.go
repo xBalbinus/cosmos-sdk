@@ -87,6 +87,16 @@ func invoke(ctr *container, key *moduleKey, invokers []interface{}) error {
 	return nil
 }
 
+func BindInterfaceFromGo(iface, to interface{}) Config {
+	return containerConfig(func(ctr *container) error {
+		return bindInterface(
+			ctr,
+			fullyQualifiedTypeName(reflect.TypeOf(iface)),
+			fullyQualifiedTypeName(reflect.TypeOf(to)),
+			"")
+	})
+}
+
 // BindInterface defines a container configuration for an explicit interface binding of inTypeName to outTypeName
 // in global scope.  The example below demonstrates a configuration where the container always provides a Canvasback
 // instance when an interface of type Duck is requested as an input.
