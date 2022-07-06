@@ -20,5 +20,7 @@ jobs:
         run: |
           git remote add fork https://github.com/${{github.event.pull_request.head.repo.full_name}}.git
           git fetch fork
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git cherry-pick ${{github.event.pull_request.head.sha}}
           git push origin main
