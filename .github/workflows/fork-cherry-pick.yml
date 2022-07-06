@@ -17,8 +17,9 @@ jobs:
           ref: refs/heads/main
           repository: xBalbinus/cosmos-sdk
       - name: Cherry pick
+        #Testing
         run: |
-          git remote add fork https://github.com/${{github.event.pull_request.head.repo.full_name}}.git\
+          git remote add fork https://github.com/${{github.event.pull_request.head.repo.full_name}}.git
           git remote set-url origin git@github.com:xBalbinus/cosmos-sdk.git
           git fetch fork
           git config --global user.name "${GITHUB_ACTOR}"
