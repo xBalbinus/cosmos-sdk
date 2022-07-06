@@ -1,5 +1,6 @@
 on:
   #Set to trigger on every merge to main, not just a closed PR.
+  workflow_dispatch:
   pull_request_target:
     branches:
       - main
