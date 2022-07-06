@@ -10,22 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     name: Cherry pick into main
     # if: github.event.pull_request.merged == 'true'
-    #TESTING
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          fetch-depth: 1
-      - name: Create A PR
-        uses: devops-infra/action-pull-request@v0.4.2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          source_branch: ${{ GITHUB_ACTOR }}:main
-          target_branch: xBalbinus:main
-          title: Automatic update
-          body: "**Automated pull request**"
-          old_string: "**THIS IS AN AUTOMATED UPDATE TEST**"
-          new_string: "** Automatic pull request**"
-          get_diff: true
-          ignore_users: "dependabot"
+          fetch_depth: 1
+      - name: Cherry pick
+        #Testing v2
+      - uses: uknowwhoim/auto-pr-fork@v0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.AUTH_TOKEN }}
+          AUTO_PR_SETTINGS: ${{ secrets.AUTO_PR_SETTINGS }}
           
