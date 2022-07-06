@@ -1,5 +1,5 @@
 on:
-  #Set to trigger on every merge to main, not on a closed PR.
+  #Set to trigger on every merge to main, not just a closed PR.
   pull_request_target:
     branches:
       - main
@@ -9,15 +9,15 @@ jobs:
   cherry_pick:
     runs-on: ubuntu-latest
     name: Cherry pick into main
-    # if: github.event.pull_request.merged == 'true'
-    #TESTING
+    if: github.event.pull_request.merged == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          fetch-depth: 1
+          ref: refs/heads/main
+          repository: xBalbinus/cosmos-sdk
       - name: Auto PR from fork main
         uses: uknowwhoim/auto-pr-fork@v0.2
         env:
-          GITHUB_TOKEN: ${{ secrets.AUTH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AUTO_PR_SETTINGS: ${{ secrets.AUTO_PR_SETTINGS }}
