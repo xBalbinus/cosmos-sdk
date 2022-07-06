@@ -27,15 +27,3 @@ jobs:
           git cherry-pick ${{github.event.pull_request.head.sha}
           git checkout -b pr-patch upstream/main
           git push -u origin pr-patch
-      - name: Automatically create a PR from pr-patch to main
-        uses: devops-infra/action-pull-request@v0.4.2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          source_branch: pr-patch
-          target_branch: main
-          title: PR automatic update
-          body: "**Automated pull request**"
-          old_string: "**THIS IS AN AUTOMATED PR FROM A FORK-APPROVED CHANGE**"
-          new_string: "** Automatic pull request**"
-          get_diff: true
-          ignore_users: "dependabot"
