@@ -20,7 +20,7 @@ jobs:
         uses: devops-infra/action-pull-request@v0.4.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          source_branch: ${GITHUB_ACTOR}:main
+          source_branch: ${{ GITHUB_ACTOR }}:main
           target_branch: xBalbinus:main
           title: Automatic update
           body: "**Automated pull request**"
