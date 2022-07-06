@@ -14,15 +14,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          fetch_depth: 1
-      - name: Cherry pick
-        #Testing v2
-        run: |
-          git remote add fork https://github.com/${{github.event.pull_request.head.repo.full_name}}.git
-          git remote set-url origin git@github.com:xBalbinus/cosmos-sdk.git
-          git fetch --all
-          git config --global user.name "${GITHUB_ACTOR}"
-          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git cherry-pick ${{github.event.pull_request.head.sha}}
-          hub pull-request --base xBalbinus:main --head ${GITHUB_ACTOR}:main
+          fetch-depth: 1
+      - name: Create A PR
+        uses: devops-infra/action-pull-request@v0.4.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          source_branch: ${GITHUB_ACTOR}:main
+          target_branch: xBalbinus: master
+          title: Automatic update
+          body: "**Automated pull request**"
+          old_string: "**THIS IS AN AUTOMATED UPDATE TEST**"
+          new_string: "** Automatic pull request**"
+          get_diff: true
+          ignore_users: "dependabot"
           
