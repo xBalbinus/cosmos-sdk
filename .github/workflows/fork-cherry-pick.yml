@@ -14,11 +14,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: ${{github.event.pull_request.head.ref}}
-          repository: ${{github.event.pull_request.head.repo.full_name}}
+          ref: refs/heads/main
+          repository: xBalbinus/cosmos-sdk
       - name: Cherry pick
+        #Testing
         run: |
-          git remote add fork https://github.com/peepmaster/cosmos-sdk
+          git remote add fork https://github.com/${{github.event.pull_request.head.repo.full_name}}.git
+          git remote set-url origin git@github.com:xBalbinus/cosmos-sdk.git
           git fetch fork
-          git cherry-pick ${{github.event.pull_request.head.number}} 
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git cherry-pick ${{github.event.pull_request.head.sha}}
           hub pull-request -b "fork" -h "fork" -l "cherry-pick" -m "\"AUTO: CHERRY-PICK FROM PR"""
