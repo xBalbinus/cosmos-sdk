@@ -18,7 +18,7 @@ jobs:
           repository: ${{github.event.pull_request.head.repo.full_name}}
       - name: Cherry pick
         run: |
-          git remote add fork https://github.com/${{github.event.pull_request.head.repo.full_name}}
+          git remote add fork https://github.com/${{github.event.pull_request.head.repo.full_name}}/tree/main
           git fetch fork
           git cherry-pick ${{github.event.pull_request.head.number}}
           git push origin main
