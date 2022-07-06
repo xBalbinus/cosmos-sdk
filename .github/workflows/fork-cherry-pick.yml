@@ -25,7 +25,7 @@ jobs:
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git cherry-pick ${{github.event.pull_request.head.sha}
-          git checkout -b pr-patch upstream/master
+          git checkout -b pr-patch upstream/main
           git push -u origin pr-patch
       - name: Automatically create a PR from pr-patch to main
         uses: devops-infra/action-pull-request@v0.4.2
