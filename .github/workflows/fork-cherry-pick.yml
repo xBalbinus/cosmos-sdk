@@ -20,7 +20,6 @@ jobs:
       - name: Auto PR from fork main
         run: |
             git config --global user.name "${GITHUB_ACTOR}"
-            git config --global user.password "${GITHUB_PAT}"
             git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
             git remote add upstream https://github.com/xBalbinus/cosmos-sdk.git
             git fetch --all                                   # Get the latest code
@@ -28,4 +27,4 @@ jobs:
             git cherry-pick ${{github.event.pull_request.head.sha}}  # Cherry pick the latest commit of PR
             git push -u origin pr-patch               # Push your changes to the remote branch
             git checkout pr-patch
-            hub pull-request --base xBalbinus:main --head ${{github.event.pull_request.head.author}}:pr-patch #Create PR fro cherry-picked, latest branch on main
+            hub pull-request --base xBalbinus:main --head pr-patch #Create PR for cherry-picked, latest branch on main
