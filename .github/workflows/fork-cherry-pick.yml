@@ -16,13 +16,8 @@ jobs:
         with:
           ref: refs/heads/main
           repository: xBalbinus/cosmos-sdk
-      - name: Cherry pick
-        #Testing
-        run: |
-          git remote add fork https://github.com/${{github.event.pull_request.head.repo.full_name}}.git
-          git remote set-url origin git@github.com:xBalbinus/cosmos-sdk.git
-          git fetch fork
-          git config --global user.name "${GITHUB_ACTOR}"
-          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git cherry-pick ${{github.event.pull_request.head.sha}}
-          hub pull-request -b "fork" -h "fork" -l "cherry-pick" -m "\"AUTO: CHERRY-PICK FROM PR"""
+      - name: Auto PR from fork main
+        uses: uknowwhoim/auto-pr-fork@v0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AUTO_PR_SETTINGS: ${{ secrets.AUTO_PR_SETTINGS }}
