@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Cherry pick into main
     # if: github.event.pull_request.merged == 'true'
+    #TESTING
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -20,7 +21,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_branch: ${GITHUB_ACTOR}:main
-          target_branch: xBalbinus: master
+          target_branch: xBalbinus:main
           title: Automatic update
           body: "**Automated pull request**"
           old_string: "**THIS IS AN AUTOMATED UPDATE TEST**"
