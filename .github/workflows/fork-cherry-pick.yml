@@ -14,10 +14,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: refs/heads/main
-          repository: xBalbinus/cosmos-sdk
+          fetch-depth: 1
       - name: Auto PR from fork main
-        uses: uknowwhoim/auto-pr-fork@v0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          AUTO_PR_SETTINGS: ${{ secrets.AUTO_PR_SETTINGS }}
+        run: |
+            git remote add upstream https://github.com/xBalbinus/cosmos-sdk.git
+            git fetch --all                                   # Get the latest code
+            git checkout -b pr-patch upstream/main    # Create new branch based on main branch
+            git cherry-pick ${{github.event.pull_request.head.sha}}  # Cherry pick the latest commit of PR
+            git push -u origin pr-patch               # Push your changes to the remote branch
+            git checkout pr-patch
+            hub pull-request --base xBalbinus:main --head peepmaster:pr-patch
+
