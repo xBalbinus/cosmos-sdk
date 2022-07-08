@@ -30,4 +30,4 @@ The IBC module for the SDK has moved to its [own repository](https://github.com/
 
 ## TEST NEW SECTION
 
-Testing new changes here.
+Testing new changes here. Testing new changes here.
