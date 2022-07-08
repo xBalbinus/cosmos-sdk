@@ -27,7 +27,3 @@ To learn more about the process of building modules, visit the [building modules
 ## IBC
 
 The IBC module for the SDK has moved to its [own repository](https://github.com/cosmos/ibc-go).
-
-## TEST NEW SECTION
-
-Testing new changes here. Testing new changes here.
