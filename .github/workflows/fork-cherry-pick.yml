@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Cherry pick into main
     if: github.event.pull_request.merged == true
-    #TESTING
     steps:
       - name: Checkout
         uses: actions/checkout@v2
